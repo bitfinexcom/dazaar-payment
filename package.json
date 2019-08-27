@@ -1,0 +1,19 @@
+{
+  "name": "dazaar-payment",
+  "version": "0.0.0",
+  "description": "Dazaar payment manager",
+  "main": "index.js",
+  "dependencies": {
+    "dazaar-eos-stream": "^0.1.0"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bitfinexcom/dazaar-payment.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bitfinexcom/dazaar-payment/issues"
+  },
+  "homepage": "https://github.com/bitfinexcom/dazaar-payment"
+}
