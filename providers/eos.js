@@ -21,6 +21,7 @@ module.exports = class DazaarEOSPayment {
     if (tail.synced || tail.active()) return process.nextTick(onsynced)
 
     tail.once('synced', onsynced)
+    tail.once('close', onsynced)
     tail.on('update', onupdate)
 
     function ontimeout () {
@@ -34,6 +35,7 @@ module.exports = class DazaarEOSPayment {
 
     function onsynced () {
       tail.removeListener('synced', onsynced)
+      tail.removeListener('close', onsynced)
       tail.removeListener('update', onupdate)
       clearTimeout(timeout)
 
@@ -70,9 +72,18 @@ module.exports = class DazaarEOSPayment {
     if (this.subscribers.has(h)) return this.subscribers.get(h)
     if (this.subscribers.size >= MAX_SUBSCRIBER_CACHE) this._gc()
 
+    const self = this
     const tail = this.eos.subscription(this._filter(buyer), this.payment)
     this.subscribers.set(h, tail)
+
+    tail.on('error', () => tail.destroy())
+    tail.on('close', onclose)
+
     return tail
+
+    function onclose () {
+      if (self.subscribers.get(h) === tail) self.subscribers.delete(h)
+    }
   }
 
   _gc () {
