@@ -39,6 +39,7 @@ module.exports = class DazaarPayment {
     loop()
 
     function loop () {
+      if (i >= self.providers.length) return cb(new Error('No payment is supported'))
       const provider = self.providers[i++]
       if (!provider) return process.nextTick(loop)
       provider.validate(key, onvalidate)
