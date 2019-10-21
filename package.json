@@ -4,7 +4,7 @@
   "description": "Dazaar payment manager",
   "main": "index.js",
   "dependencies": {
-    "dazaar-eos-stream": "^1.0.1"
+    "dazaar-eos-stream": "github:bitfinexcom/dazaar-eos-stream"
   },
   "devDependencies": {},
   "repository": {
