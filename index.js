@@ -2,7 +2,8 @@ const metadata = require('./metadata')
 const Free = require('./providers/free')
 
 const providers = [
-  require('./providers/eos')
+  require('./providers/eos'),
+  require('./providers/eos-testnet')
 ]
 
 module.exports = class DazaarPayment {
@@ -12,7 +13,7 @@ module.exports = class DazaarPayment {
     this.seller = seller
     this.providers = []
 
-    if (!payments) {
+    if (!payments || payments.length === 0) {
       this.providers.push(new Free())
     } else {
       for (const pay of payments) {
