@@ -62,17 +62,10 @@ module.exports = class DazaarPayment {
     const provider = this.providers.find(x => x)
 
     if (!provider) {
-      console.error('Payments not supported')
+      throw new Error('Payments not supported')
     }
 
-    provider.buy(buyer, amount, auth, done)
-
-    function done (err) {
-      if (err) return cb(err)
-      console.log('Your payment of ' + amount + ' to ' + self.seller.key.toString('hex') + ' has been finalised')
-      console.log('Try fetching ' + self.seller.key.toString('hex'))
-      cb()
-    }
+    provider.buy(buyer, amount, auth, cb)
   }
 }
 
