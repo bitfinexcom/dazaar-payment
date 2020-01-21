@@ -54,6 +54,19 @@ module.exports = class DazaarPayment {
       cb(null, info)
     }
   }
+
+  buy (buyer, amount, auth, cb) {
+    if (!auth) auth = {}
+    if (typeof auth === 'function') return this.buy(buyer, amount, {}, auth)
+
+    const provider = this.providers.find(x => x)
+
+    if (!provider) {
+      throw new Error('Payments not supported')
+    }
+
+    provider.buy(buyer, amount, auth, cb)
+  }
 }
 
 function findProvider (seller, payment, opts) {
