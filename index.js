@@ -56,8 +56,8 @@ module.exports = class DazaarPayment {
   }
 
   buy (buyer, amount, auth, cb) {
-    const self = this
     if (!auth) auth = {}
+    if (typeof auth === 'function') return this.buy(buyer, amount, {}, auth)
 
     const provider = this.providers.find(x => x)
 
