@@ -3,14 +3,15 @@ const Free = require('./providers/free')
 
 const providers = [
   require('./providers/eos'),
-  require('./providers/eos-testnet')
+  require('./providers/eos-testnet'),
+  require('./provider/lightning/')
 ]
 
 module.exports = class DazaarPayment {
   constructor (seller, payments, opts) {
     if (payments && !Array.isArray(payments)) payments = []
 
-    this.seller = seller
+    this.sellerKey = seller.key
     this.providers = []
 
     if (!payments || payments.length === 0) {
@@ -24,7 +25,7 @@ module.exports = class DazaarPayment {
   }
 
   metadata (buyer) {
-    return metadata(this.seller, buyer)
+    return metadata(this.selleKey, buyer)
   }
 
   destroy () {

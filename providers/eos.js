@@ -5,7 +5,7 @@ const MAX_SUBSCRIBER_CACHE = 500
 
 module.exports = class DazaarEOSPayment {
   constructor (seller, payment, opts = {}) {
-    this.seller = seller
+    this.seller = seller.key
     this.payment = payment
     this.eos = eos({ account: payment.payTo, ...opts })
     this.subscribers = new Map()
