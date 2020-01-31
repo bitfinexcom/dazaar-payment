@@ -13,7 +13,7 @@ Supports EOS and free payments.
 ``` js
 const Payment = require('dazaar-payment')
 
-const pay = new Payment(sellerKey, [{
+const pay = new Payment(seller, [{
   // dazaar card payment entry
   currency: 'EOS',
   ...
