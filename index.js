@@ -1,10 +1,10 @@
 const metadata = require('./metadata')
-const Free = require('./providers/free')
+const Free = require('./free')
 
 const providers = [
-  require('./providers/eos'),
-  require('./providers/eos-testnet'),
-  require('./provider/lightning/')
+  require('dazaar-payment-eos'),
+  require('dazaar-payment-eos/testnet'),
+  require('dazaar-payment/lightning')
 ]
 
 module.exports = class DazaarPayment {
