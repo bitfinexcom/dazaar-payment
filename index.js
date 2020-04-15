@@ -25,7 +25,7 @@ module.exports = class DazaarPayment {
   }
 
   metadata (buyer) {
-    return metadata(this.selleKey, buyer)
+    return metadata(this.sellerKey, buyer)
   }
 
   destroy () {

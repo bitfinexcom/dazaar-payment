@@ -4,9 +4,8 @@
   "description": "Dazaar payment manager",
   "main": "index.js",
   "dependencies": {
-    "dazaar-eos-stream": "github:bitfinexcom/dazaar-eos-stream",
-    "grpc-lnd": "^1.0.1",
-    "unixson": "^1.0.0"
+    "dazaar-payment-lightning": "github:hyperdivision/dazaar-payment-lightning",
+    "dazaar-payment-eos": "github:hyperdivision/dazaar-payment-eos",
   },
   "devDependencies": {},
   "repository": {
