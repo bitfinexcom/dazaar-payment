@@ -1,16 +1,18 @@
 const metadata = require('./metadata')
-const Free = require('./providers/free')
+const Free = require('./free')
 
 const providers = [
-  require('./providers/eos'),
-  require('./providers/eos-testnet')
+  ['eos', require('../../dazaar-eos')],
+  ['testnet', require('../../dazaar-eos/testnet')],
+  ['lnd', require('../lightning')],
+  ['clightning', require('../lightning')]
 ]
 
 module.exports = class DazaarPayment {
   constructor (seller, payments, opts) {
     if (payments && !Array.isArray(payments)) payments = []
 
-    this.seller = seller
+    this.sellerKey = seller.key
     this.providers = []
 
     if (!payments || payments.length === 0) {
@@ -24,7 +26,7 @@ module.exports = class DazaarPayment {
   }
 
   metadata (buyer) {
-    return metadata(this.seller, buyer)
+    return metadata(this.sellerKey, buyer)
   }
 
   destroy () {
@@ -55,23 +57,61 @@ module.exports = class DazaarPayment {
     }
   }
 
-  buy (buyer, amount, auth, cb) {
-    if (!auth) auth = {}
-    if (typeof auth === 'function') return this.buy(buyer, amount, {}, auth)
+  value (seller, time) {
+    var paymentOptions = []
 
-    const provider = this.providers.find(x => x)
+    for (let p of this.providers) {
+      for (let pay of seller.payment) {
+        if (!p.supports(pay)) continue
+        paymentOptions.push({
+          amount: time * convertDazaarPayment(pay),
+          currency: pay.currency,
+          provider: p
+        })
+      }
+    }
 
-    if (!provider) {
+    if (!paymentOptions.length) {
       throw new Error('Payments not supported')
     }
 
-    provider.buy(buyer, amount, auth, cb)
+    return paymentOptions
+  }
+
+  buy (seller, amount, provider, auth, cb) {
+    if (!auth) auth = {}
+    if (typeof auth === 'function') return this.buy(seller, amount, provider, {}, auth)
+
+    provider.buy(seller.id, amount, auth, cb)
   }
 }
 
 function findProvider (seller, payment, opts) {
-  for (const P of providers) {
-    if (P.supports(payment)) return new P(seller, payment, opts)
+  for (const [label, P] of providers) {
+    if (P.supports(payment) && label === payment.label) {
+      return new P(seller, payment, opts[label])
+    }
   }
   return null
+}
+
+function convertDazaarPayment (pay) {
+  let ratio = 0
+
+  switch (pay.unit) {
+    case 'minutes':
+      ratio = 60
+      break
+    case 'seconds':
+      ratio = 1
+      break
+    case 'hours':
+      ratio = 3600
+      break
+  }
+
+  const perSecond = Number(pay.amount) / (Number(pay.interval) * ratio)
+  if (!perSecond) throw new Error('Invalid payment info')
+
+  return perSecond
 }
