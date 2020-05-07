@@ -5,7 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "dazaar-payment-lightning": "github:bitfinexcom/dazaar-payment-lightning",
-    "dazaar-payment-eos": "github:bitfinexcom/dazaar-payment-eos",
+    "dazaar-payment-eos": "github:bitfinexcom/dazaar-payment-eos"
   },
   "devDependencies": {},
   "repository": {
