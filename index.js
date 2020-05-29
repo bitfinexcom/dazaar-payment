@@ -3,7 +3,7 @@ const Free = require('./free')
 
 const providers = [
   ['eos', require('dazaar-payment-eos')],
-  ['testnet', require('dazaar-payment-eos/testnet')],
+  ['eos-testnet', require('dazaar-payment-eos/testnet')],
   ['lnd', require('dazaar-payment-lightning')],
   ['clightning', require('dazaar-payment-lightning')]
 ]
