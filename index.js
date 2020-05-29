@@ -2,10 +2,10 @@ const metadata = require('./metadata')
 const Free = require('./free')
 
 const providers = [
-  ['eos', require('../../dazaar-eos')],
-  ['testnet', require('../../dazaar-eos/testnet')],
-  ['lnd', require('../lightning')],
-  ['clightning', require('../lightning')]
+  ['eos', require('dazaar-payment-eos')],
+  ['eos-testnet', require('dazaar-payment-eos/testnet')],
+  ['lnd', require('dazaar-payment-lightning')],
+  ['clightning', require('dazaar-payment-lightning')]
 ]
 
 module.exports = class DazaarPayment {
@@ -78,9 +78,19 @@ module.exports = class DazaarPayment {
     return paymentOptions
   }
 
-  buy (seller, amount, provider, auth, cb) {
+  buy (seller, amount, auth, provider, cb) {
+    if (typeof auth === 'function') return this.buy(seller, amount, null, null, auth)
+    if (typeof provider === 'function') return this.buy(seller, amount, auth, null, provider)
+    if (!provider) provider = this.providers[0]
     if (!auth) auth = {}
-    if (typeof auth === 'function') return this.buy(seller, amount, provider, {}, auth)
+
+    if (!provider)
+    for (let p of this.providers) {
+      for (let pay of seller.payment) {
+        if (!p.supports(pay)) provider = p
+        break
+      }
+    }
 
     provider.buy(seller.id, amount, auth, cb)
   }
@@ -88,7 +98,7 @@ module.exports = class DazaarPayment {
 
 function findProvider (seller, payment, opts) {
   for (const [label, P] of providers) {
-    if (P.supports(payment) && label === payment.label) {
+    if (P.supports(payment) && (!payment.label || label === payment.label)) {
       return new P(seller, payment, opts[label])
     }
   }
