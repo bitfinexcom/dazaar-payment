@@ -1,4 +1,4 @@
-# dazaar-payment
+# @dazaar/payment
 
 Dazaar payment manager.
 
@@ -11,7 +11,7 @@ Supports EOS and free payments.
 ## Usage
 
 ``` js
-const Payment = require('dazaar-payment')
+const Payment = require('@dazaar/payment')
 
 const pay = new Payment(seller, [{
   // dazaar card payment entry
