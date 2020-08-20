@@ -96,7 +96,7 @@ module.exports = class DazaarPayment {
   }
 }
 
-function findProvider (seller, payment, opts) {
+function findProvider (seller, payment, opts = {}) {
   for (const [label, P] of providers) {
     if (P.supports(payment) && (!payment.label || label === payment.label)) {
       return new P(seller, payment, opts[label])

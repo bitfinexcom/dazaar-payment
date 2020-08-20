@@ -1,6 +1,6 @@
 {
   "name": "@dazaar/payment",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Dazaar payment manager",
   "main": "index.js",
   "dependencies": {
